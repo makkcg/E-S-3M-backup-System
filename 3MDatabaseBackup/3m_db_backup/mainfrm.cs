@@ -391,7 +391,7 @@ namespace _3m_db_backup
                     }
                 }
                 else MessageBox.Show("Please Select Backup firstly", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                button3.Enabled = true;
+                //button3.Enabled = true;
            /* }
             catch {
                 MessageBox.Show("Program will exit to unlock files please run program again and do your restore","information",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
@@ -426,7 +426,22 @@ namespace _3m_db_backup
           }
           catch { }
         }
+        public static bool DbTableExists(string strTableNameAndSchema, string strConnection)
+        {
+            using (SqlConnection connection = new SqlConnection(strConnection))
+            {
+                string strCheckTable =
+                   String.Format(
+                      "IF OBJECT_ID('{0}', 'U') IS NOT NULL SELECT 'true' ELSE SELECT 'false'",
+                      strTableNameAndSchema);
 
+                SqlCommand command = new SqlCommand(strCheckTable, connection);
+                command.CommandType = CommandType.Text;
+                connection.Open();
+
+                return Convert.ToBoolean(command.ExecuteScalar());
+            }
+        }
         public static void StartWindowsService()
         {
             string serviceName = "MSSQLSERVER";
@@ -791,6 +806,7 @@ namespace _3m_db_backup
            SqlConnection source = new SqlConnection(connsource);
            // Create destination connection
            SqlConnection destination = new SqlConnection(conndist);
+           //DelAlltables(destination);
           /// copytable(source, destination, "AdhocEditMeasurement", 0);
   
            //copytable(source, destination, "ApplicationInformation",0);
@@ -824,7 +840,7 @@ namespace _3m_db_backup
        
           /// copytable(source, destination, "TestResultCustomParameterMapping", 1);
           /// copytable(source, destination, "TimezoneMaster", 1);
-          /// copytable(source, destination, "UnitMaster", 1);
+           //copytable(source, destination, "UnitMaster", 0);
           ///// copytable(source, destination, "UserDashboardFilters", 1);
            //copytable(source, destination, "UserMaster",0);
            /////////////////////////////////////////copytable(source, destination, "UserTestPointFilters", 1);
@@ -836,7 +852,7 @@ namespace _3m_db_backup
           /// copytable(source, destination, "DeviceSyncDetails", 1);
           /// copytable(source, destination, "EditTestResultCustomParameterMapping", 1);
           /// copytable(source, destination, "FeatureMaster", 1);
-           //copytable(source, destination, "LocationLevelMaster",0);
+          copytable(source, destination, "LocationLevelMaster",0);
           
   
            //copytable(source, destination, "OrganizationCategoryMaster",0);
@@ -844,7 +860,7 @@ namespace _3m_db_backup
            //copytable(source, destination, "OrganizationConfiguration",0);
           /// copytable(source, destination, "OrganizationImageMaster", 1);
            //copytable(source, destination, "OrganizationRoleMaster",0);
-          /// copytable(source, destination, "OrganizationTestMethodMaster", 1);
+           //copytable(source, destination, "OrganizationTestMethodMaster", 1);
            //copytable(source, destination, "OrganizationTypeMaster",0);
            //copytable(source, destination, "RolePermissions",0);
           /// copytable(source, destination, "ScheduleDefinitionMaster", 1);
@@ -857,7 +873,7 @@ namespace _3m_db_backup
            //copytable(source, destination, "UserPreferences",0);
           /// copytable(source, destination, "UserReportPreferences", 1);
           /// copytable(source, destination, "DashboardSPMapping", 1);
-          ////////////////////////////////// copytable(source, destination, "LocationPreference", 1);
+          // copytable(source, destination, "LocationPreference", 0);
           
           /// copytable(source, destination, "OrganizationCustomParameterMaster", 1);
            //copytable(source, destination, "OrganizationRoleUserMapping",0);
@@ -878,15 +894,17 @@ namespace _3m_db_backup
            copytable(source, destination, "AdhocTestPlanResult", 0);
            copytable(source, destination, "TestPlanResult", 0);
            copytable(source, destination, "AdhocTestPointResult", 0);
-           //copytable(source, destination, "LocationMaster", 0);
+           
            //copytable(source, destination, "LuminometerMaster", 0);
            copytable(source, destination, "TestPointResult", 0);
            //copytable(source, destination, "LuminometerPlantMapping", 0);  
         
-           //copytable(source, destination, "OrganizationTestMethodVersions", 0);
+           copytable(source, destination, "OrganizationTestMethodVersions", 0);
            copytable(source, destination, "TestPointMaster", 0);
             copytable(source, destination, "TestPlanMaster", 0);
-
+            //if (DbTableExists("Spark.LocationPreference", conndist)) copytable(source, destination, "LocationPreference", 0);
+            copytable(source, destination, "LocationMaster", 0);
+            copytable(source, destination, "LuminometerPlantMapping", 0); 
            copytable(source, destination, "TestPointTestMethodMapping", 0);
            copytable(source, destination, "TestPlanTestPointMapping", 0);
 
@@ -894,33 +912,43 @@ namespace _3m_db_backup
            //copytable(source, destination, "TestPointCustomParameterMapping", 0); 
 
 
-
-
-
-  
-
-
-
-
-
-
-
-
-        
-          
-
-            
-
-
         }
 
+       
+        private void DelAlltables(SqlConnection d)
+        {
+            SqlCommand cmd = new SqlCommand("DELETE FROM TestPlanUserMapping;DELETE FROM TestPointTestMethodMapping ;DELETE FROM TestPlanTestPointMapping;DELETE FROM TestPlanMaster;DELETE FROM TestPointMaster;DELETE FROM TestPointResult;DELETE FROM AdhocTestPointResult;DELETE FROM TestPlanResult;DELETE FROM AdhocTestPlanResult", d);
+            d.Open();
+            cmd.ExecuteNonQuery();
+            d.Close();
+        
+        }
 
         private void copytable(SqlConnection s,SqlConnection d, string tname,int flag)
         {
            SqlCommand cmd = new SqlCommand("DELETE FROM " + tname, d);
-           if (tname == "TestPointMaster") cmd = new SqlCommand("DELETE FROM TestPointTestMethodMapping ;DELETE FROM TestPlanTestPointMapping; DELETE FROM " + tname, d);
+           if (tname == "TestPointMaster") cmd = new SqlCommand("DELETE FROM TestPointTestMethodMapping ;DELETE FROM TestPlanTestPointMapping; DELETE FROM TestPointCustomParameterMapping; DELETE FROM " + tname, d);
            if (tname == "TestPlanMaster") cmd = new SqlCommand("DELETE FROM TestPlanUserMapping ; DELETE FROM " + tname, d);
-           
+           if (tname == "LocationMaster")
+           {
+               try
+               {
+                   cmd = new SqlCommand("DELETE FROM LocationPreference", d);
+                   d.Open();
+                   cmd.ExecuteNonQuery();
+                   d.Close();
+                   cmd = new SqlCommand("DELETE FROM LuminometerPlantMapping;DELETE FROM " + tname, d);
+
+               }
+               catch
+               {
+                   d.Close();
+                   cmd = new SqlCommand("DELETE FROM LuminometerPlantMapping;DELETE FROM " + tname, d);
+
+               }
+
+           }
+          
             // Open source and destination connections.
                 // source.Open();
        

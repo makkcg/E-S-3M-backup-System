@@ -35,4 +35,17 @@ G:\projects\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.Form2.resource
 G:\projects\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.mainfrm.resources
 G:\projects\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.Properties.Resources.resources
 G:\projects\3MDatabaseBackup\3m_db_backup\obj\Debug\3m_db_backup.csproj.GenerateResource.Cache
+C:\aaa\3MDatabaseBackup\3m_db_backup\bin\Debug\3m_db_backup.exe.config
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\3m_db_backup.exe
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\3m_db_backup.pdb
+C:\aaa\3MDatabaseBackup\3m_db_backup\bin\Debug\App_Data\3mbackup.accdb
+C:\aaa\3MDatabaseBackup\3m_db_backup\bin\Debug\3m_db_backup.exe
+C:\aaa\3MDatabaseBackup\3m_db_backup\bin\Debug\3m_db_backup.pdb
+C:\aaa\3MDatabaseBackup\3m_db_backup\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\3m_db_backup.csprojResolveAssemblyReference.cache
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.Form1.resources
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.Form2.resources
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.mainfrm.resources
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\_3m_db_backup.Properties.Resources.resources
+C:\aaa\3MDatabaseBackup\3m_db_backup\obj\Debug\3m_db_backup.csproj.GenerateResource.Cache
 G:\projects\3MDatabaseBackup\3m_db_backup\obj\Debug\3m_db_backup.csprojResolveAssemblyReference.cache

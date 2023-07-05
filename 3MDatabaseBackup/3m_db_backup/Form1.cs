@@ -43,7 +43,7 @@ namespace _3m_db_backup
             if (pathstr.LastIndexOf(temp) > 0) pathstr = pathstr.Substring(0, pathstr.Length - temp.Length);
 
             string winpath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-         
+        
             if (pathstr.Substring(0, 2).ToLower() == winpath.Substring(0, 2).ToLower())
             {
                 MessageBox.Show("This Application shouldn't be installed in the same drive of windows. Please uninstall the application and reinstall it in another drive", "warning", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -51,7 +51,7 @@ namespace _3m_db_backup
             }
             else
             {
-                    
+                   
 
                 if (!File.Exists(pathstr + "\\App_Data\\settings.xml"))
                 {
@@ -69,7 +69,7 @@ namespace _3m_db_backup
                 }
 
 
-           }
+          }
         }
          private bool SetEveryoneAccess(string dirName)
         {
